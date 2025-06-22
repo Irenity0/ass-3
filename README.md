@@ -1,4 +1,4 @@
-# 📚 Library Management API
+# 📚 Kitler Library System
 
 This is a simple Library Management System built with Express, TypeScript, and MongoDB (Mongoose).
 
@@ -16,8 +16,8 @@ It lets you manage books and handle borrowing logic with proper validation, filt
 1. **Clone the repo**
 
 ```bash
-git clone https://github.com/your-username/library-management-api.git
-cd library-management-api
+git clone https://github.com/Irenity0/ass-3
+cd ass-3
 ````
 
 2. **Install dependencies**
