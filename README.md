@@ -88,3 +88,4 @@ Borrow summary — shows total quantity borrowed per book (uses aggregation).
 * Updates `available` status automatically
 * Uses Mongoose static method and middleware
 * Supports query filtering and sorting
+* Supports pagination too now
