@@ -21,21 +21,44 @@ export const createBook = async (req: Request, res: Response) => {
   }
 };
 
-
 export const getAllBooks = async (req: Request, res: Response) => {
   try {
-    const { filter, sortBy = 'createdAt', sort = 'asc', limit = '10' } = req.query;
-    const query: any = {};
-    if (filter) query.genre = filter;
+    const {
+      filter,
+      sortBy = 'createdAt',
+      sort = 'asc',
+      page = '1',
+      limit = '10'
+    } = req.query;
 
-    const books = await Book.find(query)
-      .sort({ [sortBy as string]: sort === 'asc' ? 1 : -1 })
-      .limit(parseInt(limit as string));
+    const query: any = {};
+    if (filter) {
+      query.genre = filter;
+    }
+
+    const pageNumber = parseInt(page as string) || 1;
+    const limitNumber = parseInt(limit as string) || 10;
+    const skip = (pageNumber - 1) * limitNumber;
+
+    const [books, total] = await Promise.all([
+      Book.find(query)
+        .sort({ [sortBy as string]: sort === 'asc' ? 1 : -1 })
+        .skip(skip)
+        .limit(limitNumber)
+        .select('-__v'),
+      Book.countDocuments(query)
+    ]);
 
     res.json({
       success: true,
       message: 'Books retrieved successfully',
-      data: books
+      data: books,
+      pagination: {
+        total,
+        page: pageNumber,
+        limit: limitNumber,
+        pages: Math.ceil(total / limitNumber)
+      }
     });
   } catch (error) {
     res.status(500).json({
@@ -45,6 +68,7 @@ export const getAllBooks = async (req: Request, res: Response) => {
     });
   }
 };
+
 
 export const getBookById: RequestHandler = async (req, res, next) => {
   try {

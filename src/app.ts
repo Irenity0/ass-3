@@ -1,12 +1,17 @@
 import express, { NextFunction, Request, Response } from 'express';
 import "dotenv/config";
+import cors from 'cors'; 
 import bookRoutes from './app/routes/book.route'
 import borrowRoutes from './app/routes/borrow.route'
 
 const app = express();
 
 app.use(express.json())
-
+app.use(
+  cors({
+    origin: ["http://localhost:5173"]
+  })
+);
 app.get("/", (req: Request, res: Response) => {
   res.send("Kitler Library System");
 });
